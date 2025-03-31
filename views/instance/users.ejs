@@ -1,175 +1,336 @@
 <%- include('../components/template') %>
 <main id="content">
-
     <style>
+        .subuser-list {
+            display: block;
+            margin-top: 1rem;
+        }
+        
         .subuser-list-item {
-        display: flex;
-        align-items: center;
-        padding: 0.75rem;
-        border-radius: 0.375rem;
-        transition: background-color 0.2s ease;
-        cursor: pointer;
-    }
-    .subuser-list-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    .subuser-list-item .icon {
-        margin-right: 0.75rem;
-    }
-    .subuser-list-item .name {
-        flex-grow: 1;
-    }
-    .subuser-list {
-        display: block;
-    }
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .subuser-list-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .subuser-list-item .icon {
+            margin-right: 0.75rem;
+            color: #a5b4fc;
+        }
+        
+        .subuser-list-item .name {
+            flex-grow: 1;
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+        
+        .subuser-list-item .user-id {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+            font-family: monospace;
+        }
+        
         .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.3s ease, visibility 0.3s ease;
-      }
-    
-      .modal-overlay.active {
-          opacity: 1;
-          visibility: visible;
-      }
-      .modal-overlay.active .modal-content {
-          transform: scale(1);
-          opacity: 1;
-      }
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: #1e293b;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 28rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transform: scale(0.95);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .empty-state-icon {
+            width: 5rem;
+            height: 5rem;
+            margin: 0 auto 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .empty-state-icon svg {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #10b981;
+        }
+        
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .empty-state-description {
+            color: #9ca3af;
+            max-width: 24rem;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        
+        .btn-secondary {
+            background-color: #374151;
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3f4a5a;
+        }
+        
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            color: white;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
     </style>
+    
     <%- include('../components/instance') %>
-    <div class="bg-white/5 rounded-xl p-6 mb-6">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold">Subusers</h2>
-            <button id="addSubuser" class="bg-emerald-500/50 hover:bg-emerald-700/50 text-white font-medium py-1.5 px-4 rounded-full hover:scale-95 transition">Add Subuser</button>
-        </div>
-        <div class="space-y-2">
-           
-            <% if (users.length === 0) { %>
-                <div class="text-center py-8">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-emerald-500/50 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                          </svg>                          
-                    </div>
-                    <h3 class="text-lg font-medium text-white mb-2">No Users Found</h3>
-                    <p class="text-indigo-200/60">Give Access to your friends to manage your server</p>
-                </div>
-            <% } else { %>
-            <% users.forEach(function(user) { %>
-            <div class="flex items-center space-x-2 w-full">
-                <div class="icon flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mb-0.5 inline-flex mr-1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
-                </div>
-                <span class="text-gray-200 flex-grow"><%= user.username %></span>
-                <span class="text-gray-400 text-sm"><%= user.userId %></span>
-                <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-4 rounded-full text-sm hover:scale-95" onclick="location.href='/instance/<%= req.params.id %>/users/remove/<%= user.username %>'">Remove</button>
-            </div>
+    
+    <div class="bg-gray-800/50 rounded-xl p-6 mb-6 border border-gray-700/50">
+        <div class="action-bar">
+            <h2 class="action-title">Subusers</h2>
+            <button id="addSubuser" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Add Subuser
+            </button>
         </div>
         
-        <% }); %>
-        <% } %>
+        <div class="subuser-list">
+            <% if (users.length === 0) { %>
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="empty-state-title">No Subusers Found</h3>
+                    <p class="empty-state-description">Add subusers to grant them access to manage your server</p>
+                </div>
+            <% } else { %>
+                <% users.forEach(function(user) { %>
+                    <div class="subuser-list-item">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <span class="name"><%= user.username %></span>
+                        <span class="user-id"><%= user.userId %></span>
+                        <button class="btn btn-danger" onclick="location.href='/instance/<%= req.params.id %>/users/remove/<%= user.username %>'">
+                            Remove
+                        </button>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
     </div>
+    
     <!-- Add Subuser Modal -->
-<div id="add-subuser-modal" class="modal-overlay z-50">
-    <div class="bg-[#1b1d21] rounded-2xl modal-content w-full max-w-md p-6">
-        <h3 class="text-xl font-semibold mb-4">Add Subuser</h3>
-        <form id="add-subuser-form">
-            <div class="mb-4">
-                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
-                <input type="username" id="username" name="username" required class="w-full px-3 py-2 bg-white/5 border border-white/5 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-            <div class="flex justify-end">
-                <button type="button" id="cancel-add" class="bg-neutral-600 hover:bg-neutral-700 text-white font-medium py-2 px-4 rounded-xl transition mr-2">Cancel</button>
-                <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-xl transition">Add Subuser</button>
-            </div>
-        </form>
+    <div id="add-subuser-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-xl font-semibold mb-4 text-white">Add Subuser</h3>
+            <form id="add-subuser-form">
+                <div class="mb-4">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" required class="form-input" placeholder="Enter username">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="cancel-add" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Subuser</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-    </main>
+</main>
 
 <script>
-     function showModal(modalId) {
+    // Modal handling
+    function showModal(modalId) {
         const modal = document.getElementById(modalId);
         modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeModal(modalId) {
         const modal = document.getElementById(modalId);
         modal.classList.remove('active');
+        document.body.style.overflow = '';
     }
+
+    // Event listeners
+    document.getElementById('addSubuser').addEventListener('click', () => {
+        showModal('add-subuser-modal');
+    });
 
     document.getElementById('cancel-add').addEventListener('click', () => {
         closeModal('add-subuser-modal');
     });
 
-    document.getElementById('add-subuser-form').addEventListener('submit', (e) => {
+    // Close modal when clicking outside
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+            closeModal('add-subuser-modal');
+        }
+    });
+
+    // Form submission
+    document.getElementById('add-subuser-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('username').value;
-        const currentUsername = '<%= req.user.username %>'; 
+        const username = document.getElementById('username').value.trim();
+        const currentUsername = '<%= req.user.username %>';
+        
+        if (!username) {
+            alert("Please enter a username");
+            return;
+        }
         
         if (username === currentUsername) {
-        alert("You cannot add yourself as a subuser.");
-        return;  // Prevent form submission if the username is the same as the logged-in user
-    }
+            alert("You cannot add yourself as a subuser.");
+            return;
+        }
         
-        fetch(`/instance/<%= req.params.id %>/users/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username })
-        })
-        .then(response => {
+        try {
+            const response = await fetch(`/instance/<%= req.params.id %>/users/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username })
+            });
+            
             if (response.ok) {
                 closeModal('add-subuser-modal');
-                setTimeout(() => {
                 window.location.reload();
-            }, 2000);
-                document.getElementById('username').value = '';
             } else {
-                throw new Error('Failed to add subuser');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to add subuser');
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error adding subuser:', error);
-            alert('An error occurred while adding the subuser. Please try again.');
-        });
+            alert(error.message || 'An error occurred while adding the subuser. Please try again.');
+        }
     });
 
+    // Initialize tooltips
     document.addEventListener("DOMContentLoaded", function() {
-        const createUserModal = document.getElementById('createUserModal');
-        const closeModalButton = document.getElementById('closeModal');
-
-    document.getElementById('addSubuser').addEventListener('click', () => {
-        showModal('add-subuser-modal');
-    });
-
-        addSubuserButton.addEventListener('click', openModal);
-        closeModalButton.addEventListener('click', closeModal);
-
-        window.addEventListener('click', function(event) {
-            if (event.target === createUserModal) {
-                closeModal();
-            }
-        });
-
-        createUserModal.querySelector('div').addEventListener('click', function(event) {
-            event.stopPropagation();
-        });
+        // Add any initialization code here if needed
     });
 </script>
-</body>
-</html>
