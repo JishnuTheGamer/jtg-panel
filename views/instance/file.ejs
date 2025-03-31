@@ -87,6 +87,14 @@
         <span id="saveText">Save File</span>
       </span>
     </button>
+    <button id="extractButton" onclick="extractFile()" type="button" class="rounded-xl bg-indigo-600 hover:bg-indigo-700 px-4 py-2 text-center text-sm font-medium shadow-lg transition focus:outline focus:outline-2 focus:outline-offset-2">
+      <span class="flex items-center justify-center">
+        <svg id="extractIcon" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        <span id="extractText">Download</span>
+      </span>
+    </button>
   </div>
 </main>
 
@@ -122,7 +130,15 @@
 %>
 
 // Initialize Monaco Editor
-require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
+require.config({ 
+  paths: { 
+    'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' 
+  },
+  'vs/nls': {
+    availableLanguages: { '*': 'en' } // Fix for language localization issues
+  }
+});
+
 require(['vs/editor/editor.main'], function() {
   var editor = monaco.editor.create(document.getElementById('editor'), {
     value: <%- JSON.stringify(file) %>,
@@ -133,7 +149,12 @@ require(['vs/editor/editor.main'], function() {
     fontSize: 14,
     lineNumbers: 'on',
     scrollBeyondLastLine: false,
-    renderWhitespace: 'selection'
+    renderWhitespace: 'selection',
+    scrollbar: {
+      vertical: 'auto',
+      horizontal: 'auto',
+      useShadows: true
+    }
   });
 
   window.editor = editor;
@@ -145,15 +166,13 @@ require(['vs/editor/editor.main'], function() {
       hasUnsavedChanges = true;
       document.getElementById('saveStatus').textContent = 'Unsaved changes';
       document.getElementById('saveStatus').classList.add('text-yellow-400');
+      document.getElementById('saveStatus').classList.remove('text-neutral-400');
     }
   });
 
   // Save on Ctrl+S / Cmd+S
-  window.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      saveFile();
-    }
+  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+    saveFile();
   });
 });
 
@@ -195,6 +214,8 @@ function saveFile() {
       saveIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
       statusIndicator.textContent = 'All changes saved';
       statusIndicator.classList.remove('text-yellow-400');
+      statusIndicator.classList.add('text-neutral-400');
+      hasUnsavedChanges = false;
       
       // Reset button after delay
       setTimeout(() => {
@@ -212,6 +233,7 @@ function saveFile() {
     saveText.textContent = 'Error!';
     saveIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
     statusIndicator.textContent = 'Error saving file';
+    statusIndicator.classList.remove('text-neutral-400');
     statusIndicator.classList.add('text-red-400');
     
     // Reset button after delay
@@ -221,5 +243,41 @@ function saveFile() {
       saveIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
     }, 2000);
   });
+}
+
+// Extract/download file function
+function extractFile() {
+  var button = document.getElementById('extractButton');
+  var extractText = document.getElementById('extractText');
+  var extractIcon = document.getElementById('extractIcon');
+  
+  // Change button state
+  button.disabled = true;
+  extractText.textContent = 'Preparing...';
+  extractIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+  
+  var filename = <%- JSON.stringify(req.params.file) %>;
+  var instanceId = <%- JSON.stringify(req.params.id) %>;
+  var fileContent = window.editor.getValue();
+  
+  // Create a blob and download link
+  var blob = new Blob([fileContent], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  
+  // Clean up
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    
+    // Reset button state
+    button.disabled = false;
+    extractText.textContent = 'Download';
+    extractIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>';
+  }, 100);
 }
 </script>
