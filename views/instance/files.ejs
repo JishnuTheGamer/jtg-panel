@@ -22,26 +22,34 @@
        }
        %>
    <%
-      function getFileIcon(purpose) {
-        const icons = {
-          programming: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-blue-400">
-           <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 0 0 2 4.25v11.5A2.25 2.25 0 0 0 4.25 18h11.5A2.25 2.25 0 0 0 18 15.75V4.25A2.25 2.25 0 0 0 15.75 2H4.25Zm4.03 6.28a.75.75 0 0 0-1.06-1.06L4.97 9.47a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 0 0 1.06-1.06L6.56 10l1.72-1.72Zm4.5-1.06a.75.75 0 1 0-1.06 1.06L13.44 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06l2.25-2.25a.75.75 0 0 0 0-1.06l-2.25-2.25Z" clip-rule="evenodd" />
-         </svg>
-         `,
-          webDevelopment: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-blue-400">
-           <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 0 0 2 4.25v11.5A2.25 2.25 0 0 0 4.25 18h11.5A2.25 2.25 0 0 0 18 15.75V4.25A2.25 2.25 0 0 0 15.75 2H4.25Zm4.03 6.28a.75.75 0 0 0-1.06-1.06L4.97 9.47a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 0 0 1.06-1.06L6.56 10l1.72-1.72Zm4.5-1.06a.75.75 0 1 0-1.06 1.06L13.44 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06l2.25-2.25a.75.75 0 0 0 0-1.06l-2.25-2.25Z" clip-rule="evenodd" />
-         </svg>
-         `,
-          textDocument: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-blue-400">
-           <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd" />
-          </svg>`,
-          other: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 text-neutral-400">
-           <path fill-rule="evenodd" d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-         </svg>
-         `
-        };
-      
-        return icons[purpose] || icons.other;
+      function getFileIcon(filename) {
+        const extension = filename.split('.').pop().toLowerCase();
+        const archiveExtensions = ['zip', 'rar', 'tar', 'gz', '7z'];
+        const codeExtensions = ['js', 'ts', 'py', 'java', 'c', 'cpp', 'h', 'php', 'html', 'css', 'scss', 'json', 'xml'];
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+        const documentExtensions = ['txt', 'doc', 'docx', 'pdf', 'rtf', 'md'];
+        
+        if (archiveExtensions.includes(extension)) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-yellow-400">
+            <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm5 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1Z" clip-rule="evenodd" />
+          </svg>`;
+        } else if (codeExtensions.includes(extension)) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-blue-400">
+            <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 0 0 2 4.25v11.5A2.25 2.25 0 0 0 4.25 18h11.5A2.25 2.25 0 0 0 18 15.75V4.25A2.25 2.25 0 0 0 15.75 2H4.25Zm4.03 6.28a.75.75 0 0 0-1.06-1.06L4.97 9.47a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 0 0 1.06-1.06L6.56 10l1.72-1.72Zm4.5-1.06a.75.75 0 1 0-1.06 1.06L13.44 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06l2.25-2.25a.75.75 0 0 0 0-1.06l-2.25-2.25Z" clip-rule="evenodd" />
+          </svg>`;
+        } else if (imageExtensions.includes(extension)) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-green-400">
+            <path fill-rule="evenodd" d="M1 5.25A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25v9.5A2.25 2.25 0 0 1 16.75 17H3.25A2.25 2.25 0 0 1 1 14.75v-9.5Zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-2.69l-2.22-2.219a.75.75 0 0 0-1.06 0l-1.91 1.909.47.47a.75.75 0 1 1-1.06 1.06L6.53 8.091a.75.75 0 0 0-1.06 0l-2.97 2.97ZM12 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd" />
+          </svg>`;
+        } else if (documentExtensions.includes(extension)) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 text-blue-400">
+            <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd" />
+          </svg>`;
+        } else {
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 text-neutral-400">
+            <path fill-rule="evenodd" d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+          </svg>`;
+        }
       }
       %>
    <div class="bg-transparent">
@@ -168,14 +176,16 @@
          
                <% files.filter(file => !file.isDirectory).forEach(function(file) { %>
                   <% let extension = req.query.path ? '?path=' + req.query.path : ''; %>
+                  <% const fileExt = file.name.split('.').pop().toLowerCase(); %>
+                  <% const isArchive = ['zip', 'rar', 'tar', 'gz', '7z'].includes(fileExt); %>
                   <tr class="hover:bg-neutral-750 transition-colors">
                      <td class="px-6 py-4 whitespace-nowrap">
                         <input type="checkbox" class="h-4 w-4 text-blue-600 border-neutral-600 rounded bg-neutral-700 focus:ring-blue-500 file-checkbox" data-filename="<%= file.name %>">
                      </td>
                      <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
-                           <div class="flex-shrink-0 h-5 w-5 text-blue-400">
-                              <%- getFileIcon(file.purpose) %>
+                           <div class="flex-shrink-0 h-5 w-5">
+                              <%- getFileIcon(file.name) %>
                            </div>
                            <div class="ml-4">
                               <a href="/instance/<%= req.params.id %>/files/view/<%= file.name %><%= extension %>" class="text-sm font-medium text-blue-400 hover:text-blue-300">
@@ -198,6 +208,10 @@
                         </button>
                         <div id="dropdown-<%= file.name %>" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-neutral-800 ring-1 ring-black ring-opacity-5 z-10 transform opacity-0 scale-95 transition-all duration-200 ease-out pointer-events-none border border-neutral-700">
                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                              <a href="/instance/<%= req.params.id %>/files/download/<%= file.name %><%= extension %>" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition" role="menuitem">Download</a>
+                              <% if (isArchive) { %>
+                                 <a href="#" onclick="openExtractModal('<%= file.name %>', '<%= extension %>')" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition" role="menuitem">Extract</a>
+                              <% } %>
                               <a href="#" onclick="openRenameModal('<%= file.name %>', '<%= extension %>')" class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition" role="menuitem">Rename</a>
                               <a href="#" onclick="openDeleteModal('<%= file.name %>', '<%= extension %>')" class="block px-4 py-2 text-sm text-red-500 hover:bg-neutral-700 hover:text-red-400 transition" role="menuitem">Delete</a>
                            </div>
@@ -216,12 +230,43 @@
    <!-- Floating Action Bar -->
    <div id="floatingActionBar" class="fixed bottom-0 left-0 right-0 bg-neutral-800 border-t border-neutral-700 text-white py-3 px-6 transform translate-y-full transition-transform duration-300 ease-in-out flex justify-between items-center shadow-lg">
       <span id="selectedFilesCount" class="text-sm text-neutral-300">0 files selected</span>
-      <button id="massDeleteBtn" class="inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-         </svg>
-         Delete
-      </button>
+      <div class="flex space-x-3">
+         <button id="massDownloadBtn" class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+               <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Download
+         </button>
+         <button id="massDeleteBtn" class="inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+               <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            Delete
+         </button>
+      </div>
+   </div>
+   
+   <!-- Extract Archive Modal -->
+   <div id="extractModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="bg-neutral-800 rounded-lg p-6 max-w-md w-full transform scale-95 transition-transform duration-300 border border-neutral-700">
+         <h2 class="text-xl font-semibold mb-1 text-white">Extract Archive</h2>
+         <p class="mb-4 text-neutral-400 text-sm">Extract the contents of <span id="extractFileName" class="font-medium text-blue-400"></span></p>
+         
+         <div class="mb-4">
+            <label class="block text-sm font-medium text-neutral-300 mb-1">Destination Folder</label>
+            <input type="text" id="extractDestination" class="w-full px-3 py-2 bg-neutral-700 border border-neutral-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Leave empty for current directory">
+         </div>
+         
+         <div class="flex items-center mb-4">
+            <input type="checkbox" id="deleteAfterExtract" class="h-4 w-4 text-blue-600 border-neutral-600 rounded bg-neutral-700 focus:ring-blue-500">
+            <label for="deleteAfterExtract" class="ml-2 block text-sm text-neutral-300">Delete archive after extraction</label>
+         </div>
+         
+         <div class="flex justify-end space-x-3">
+            <button onclick="closeExtractModal()" class="px-4 py-2 bg-neutral-700 text-white rounded-md hover:bg-neutral-600 transition">Cancel</button>
+            <button onclick="confirmExtract()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition">Extract</button>
+         </div>
+      </div>
    </div>
    
    <!-- Mass Delete Confirmation Modal -->
@@ -445,6 +490,46 @@
          }
       }
       
+      // Extract archive functionality
+      let extractFileName = '';
+      let extractExtension = '';
+      
+      function openExtractModal(fileName, extension) {
+         const modal = document.getElementById('extractModal');
+         extractFileName = fileName;
+         extractExtension = extension;
+         
+         document.getElementById('extractFileName').textContent = fileName;
+         document.getElementById('extractDestination').value = '';
+         document.getElementById('deleteAfterExtract').checked = false;
+         
+         modal.classList.remove('opacity-0', 'pointer-events-none');
+         modal.querySelector('div').classList.remove('scale-95');
+         modal.querySelector('div').classList.add('scale-100');
+      }
+      
+      function closeExtractModal() {
+         const modal = document.getElementById('extractModal');
+         modal.classList.add('opacity-0', 'pointer-events-none');
+         modal.querySelector('div').classList.remove('scale-100');
+         modal.querySelector('div').classList.add('scale-95');
+      }
+      
+      function confirmExtract() {
+         const destination = document.getElementById('extractDestination').value.trim();
+         const deleteAfter = document.getElementById('deleteAfterExtract').checked;
+         
+         let extractUrl = `/instance/<%= req.params.id %>/files/extract/${extractFileName}${extractExtension}`;
+         if (destination) {
+            extractUrl += `&destination=${encodeURIComponent(destination)}`;
+         }
+         if (deleteAfter) {
+            extractUrl += `&deleteAfter=true`;
+         }
+         
+         window.location.href = extractUrl;
+      }
+      
       document.getElementById('newFileName').addEventListener('input', function(event) {
          const warningElement = document.getElementById('extensionWarning');
          const newExtension = event.target.value.split('.').pop();
@@ -462,6 +547,7 @@
       const fileCheckboxes = document.querySelectorAll('.file-checkbox:not(#selectAll)');
       const floatingActionBar = document.getElementById('floatingActionBar');
       const selectedFilesCount = document.getElementById('selectedFilesCount');
+      const massDownloadBtn = document.getElementById('massDownloadBtn');
       const massDeleteBtn = document.getElementById('massDeleteBtn');
       const massDeleteModal = document.getElementById('massDeleteModal');
       const massDeleteMessage = document.getElementById('massDeleteMessage');
@@ -504,6 +590,17 @@
       
       fileCheckboxes.forEach(checkbox => {
          checkbox.addEventListener('change', updateSelectedFiles);
+      });
+      
+      massDownloadBtn.addEventListener('click', function() {
+         if (selectedFiles.length === 1) {
+            // Single file download
+            window.location.href = `/instance/<%= req.params.id %>/files/download/${selectedFiles[0]}<%= query %>`;
+         } else {
+            // Multiple files download - create a zip on server side
+            const filesParam = selectedFiles.map(f => encodeURIComponent(f)).join(',');
+            window.location.href = `/instance/<%= req.params.id %>/files/download-multiple?files=${filesParam}<%= query ? '&' + query.substring(1) : '' %>`;
+         }
       });
       
       massDeleteBtn.addEventListener('click', function() {
