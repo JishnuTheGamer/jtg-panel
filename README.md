@@ -1,5 +1,5 @@
 
-<h2> DracoPanel is an open-source panel for managing your game servers, applications, and more built with modern technologies such as Node.js, Docker, and Express - made to work with our DracoDaemon software.</h2>
+<h2> jtg-Panel is a panel for managing your game servers, applications, and more built with modern technologies such as Node.js, Docker, and Express - made to work with our DracoDaemon software.</h2>
 
 ## Installation
 ### Picking a Server OS
@@ -42,3 +42,4 @@ git clone https://github.com/draco-labes/DracoPanel-v0.3.0.git && cd DracoPanel-
 - SRYDEN (https://sryden.com)
 - HydraPanel,hydra-labes
 - Edited by **hopingboyz**
+- re-launch by Jishnu
