@@ -4,7 +4,7 @@
 ## Installation
 ### Picking a Server OS
 
-DracoPanel runs on various operating systems, so pick whichever you are most comfortable using.
+jtg-Panel runs on various operating systems, so pick whichever you are most comfortable using.
 
 | Operating System | Version |     Supported      | Notes                                                       |
 |------------------|---------|:------------------:|-------------------------------------------------------------|
@@ -32,7 +32,7 @@ apt-get install nodejs -y
 
 ### Installation Panel
 
-To install and start the Draco Panel , run the following commands:
+To install and start the jtg Panel , run the following commands:
 
 ```bash
 git clone https://github.com/JishnuTheGamer/jtg-panel.git && cd jtg-panel && npm install && npm run seed && npm run createUser && node .
@@ -42,4 +42,4 @@ git clone https://github.com/JishnuTheGamer/jtg-panel.git && cd jtg-panel && npm
 - SRYDEN (https://sryden.com)
 - HydraPanel,hydra-labes
 - Edited by **hopingboyz**
-- re-launch by Jishnu
+- re-launch by **Jishnu**
