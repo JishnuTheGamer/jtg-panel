@@ -1,5 +1,5 @@
 
-<h2> jtg-Panel is a panel for managing your game servers, applications, and more built with modern technologies such as Node.js, Docker, and Express - made to work with our DracoDaemon software.</h2>
+<h2> jtg-Panel is a panel for managing your game servers, applications, and more built with modern technologies such as Node.js, Docker, and Express - made to work with our jtg-Daemon software.</h2>
 
 ## Installation
 ### Picking a Server OS
