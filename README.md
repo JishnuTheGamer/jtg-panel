@@ -39,7 +39,5 @@ git clone https://github.com/JishnuTheGamer/jtg-panel.git && cd jtg-panel && npm
 ```
 
 - Skyport (EOL)
-- SRYDEN (https://sryden.com)
-- HydraPanel,hydra-labes
 - Edited by **hopingboyz**
 - re-launch by **Jishnu**
