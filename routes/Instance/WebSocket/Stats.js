@@ -4,7 +4,7 @@ const WebSocket = require('ws');
 const { db } = require('../../../handlers/db.js');
 const { isUserAuthorizedForContainer } = require('../../../utils/authHelper');
 
-router.ws("/console/:id", async (ws, req) => {
+router.ws("/stats/:id", async (ws, req) => {
     if (!req.user) return ws.close(1008, "Authorization required");
 
     const { id } = req.params;
@@ -18,7 +18,8 @@ router.ws("/console/:id", async (ws, req) => {
     }
 
     const node = instance.Node;
-    const socket = new WebSocket(`ws://${node.address}:${node.port}/exec/${instance.ContainerId}`);
+    const volume = instance.VolumeId;
+    const socket = new WebSocket(`ws://${node.address}:${node.port}/stats/${instance.ContainerId}/${volume}`);
 
     socket.onopen = () => {
         socket.send(JSON.stringify({ "event": "auth", "args": [node.apiKey] }));
@@ -29,7 +30,7 @@ router.ws("/console/:id", async (ws, req) => {
     };
 
     socket.onerror = (error) => {
-        ws.send('\x1b[31;1mThis instance is unavailable! \n\x1b[0mThe skyportd instance appears to be down. Retrying...\n')
+        ws.send('\x1b[31;1mThis instance is unavailable! \x1b[0mThe HydraDaemon instance appears to be down. Retrying...')
     };
 
     socket.onclose = (event) => {};
@@ -43,6 +44,4 @@ router.ws("/console/:id", async (ws, req) => {
     });
 });
 
-/* you'll remember in November, someone knows the meaning of this */
-/* SSB0aGluayB0aGlzIHRpbWUgSSdtIGR5aW5nCkknbSBub3QgbWVsb2RyYW1hdGljCkknbSBqdXN0IHByYWdtYXRpYyBiZXlvbmQgYW55ClJlYXNvbmluZyBmb3IgdGhpbmtpbmcgSSd2ZSBnb3QgZnVja2luZyByYWJpZXMgb3Igc29tZXRoaW5n */
 module.exports = router;
