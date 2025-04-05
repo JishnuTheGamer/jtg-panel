@@ -1,9 +1,9 @@
 const express = require('express');
 const axios = require('axios');
 const { db } = require('../../handlers/db.js');
-const { logAudit } = require('../../handlers/auditlog.js');
-const { isUserAuthorizedForContainer } = require('../../utils/authHelper');
-const { v4: uuid } = require('uuid');
+const { isUserAuthorizedForContainer, isInstanceSuspended } = require('../../utils/authHelper');
+const { checkContainerState } = require('../../utils/checkstate.js');
+const log = new (require('cat-loggr'))();
 
 const router = express.Router();
 
@@ -31,14 +31,11 @@ router.post('/instance/reinstall/:id', async (req, res) => {
             return res.status(403).send('Unauthorized access to this instance.');
         }
 
-        if(!instance.suspended) {
-            instance.suspended = false;
-            db.set(id + '_instance', instance);
+        const suspended = await isInstanceSuspended(req.user.userId, instance, id);
+        if (suspended === true) {
+            return res.render('instance/suspended', { req, user: req.user });
         }
-    
-        if(instance.suspended === true) {
-            return res.redirect('../../instances?err=SUSPENDED');
-       }
+
         const { Node: node, imageData, Memory: memory, Cpu: cpu, Ports: ports, Name: name, User: user, Primary: primary, ContainerId: containerId, Env } = instance;
         const nodeId = node.id;
 
@@ -57,9 +54,11 @@ router.post('/instance/reinstall/:id', async (req, res) => {
 
         await updateDatabaseWithNewInstance(response.data, user, node, shortimage, memory, cpu, ports, primary, name, id, Env);
 
+        checkContainerState(id, node.address, node.port, node.apiKey, user);
+
         res.status(201).redirect(`../../instance/${id}`);
     } catch (error) {
-        console.error('Error reinstalling instance:', error);
+        log.error('Error reinstalling instance:', error);
         res.status(500).json({
             error: 'Failed to reinstall container',
             details: error.response ? error.response.data : 'No additional error info'
@@ -67,14 +66,13 @@ router.post('/instance/reinstall/:id', async (req, res) => {
     }
 });
 
-
 async function prepareRequestData(image, memory, cpu, ports, name, node, id, containerId, Env) {
     const rawImages = await db.get('images');
     const imageData = rawImages.find(i => i.Image === image);
 
     const requestData = {
         method: 'post',
-        url: `http://${node.address}:${node.port}/instances/reinstall/${containerId}`,
+        url: `http://${node.address}:${node.port}/instances/reinstall/${containerId}/${id}`,
         auth: {
             username: 'Skyport',
             password: node.apiKey
@@ -119,6 +117,7 @@ async function updateDatabaseWithNewInstance(responseData, userId, node, image, 
         Id: id,
         Node: node,
         User: userId,
+        InternalState: 'INSTALLING',
         ContainerId: responseData.containerId,
         VolumeId: id,
         Memory: parseInt(memory),
@@ -128,7 +127,7 @@ async function updateDatabaseWithNewInstance(responseData, userId, node, image, 
         Image: image,
         AltImages: altImages,
         imageData,
-        Env
+        Env,
     };
 
     let userInstances = await db.get(`${userId}_instances`) || [];
