@@ -4,7 +4,7 @@
   "session_secret": "Random",
   "domain": "localhost",
   "mode": "production",
-  "version": "1.0.5",
+  "version": "0.4.0",
   "note": "you can also use Mysql if you put mysql://user:pass@localhost:3306/dbname into databaseURL!",
   "databaseURL": "sqlite://skyport.db",
   "databaseTable": "jtg-panel",
