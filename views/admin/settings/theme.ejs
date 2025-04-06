@@ -40,26 +40,7 @@
                <button id="Save-paneltheme-color" type="submit" class="mt-6 block rounded-xl <%= theme['button-color'] %> px-3 py-2 text-center text-sm font-medium shadow-lg transition focus:outline focus:outline-2 focus:outline-offset-2"><%= req.translations.save %></button>
             </form>
          </div>
-         <div id="togglefooterform" class="mt-6">
-            <form action="/admin/settings/toggle/theme/footer" method="POST">
-               <div class="flex items-center mb-2">
-                  <% if (settings.footer === true) { %>
-                  <span class="text-neutral-400 text-sm tracking-tight mb-2">Skyport Credits: <span class="font-medium text-green-500"><%= req.translations.enabled %></span></span>
-                  <% } else { %>
-                  <span class="text-neutral-400 text-sm tracking-tight mb-2">Skyport Credits: <span class="font-medium text-red-500"><%= req.translations.disabled %></span></span>
-                  <% } %>
-               </div>
-               <div class="flex flex-col sm:flex-row">
-                  <% if (settings.footer === true) { %>  
-                  <button id="togglefooter" type="submit" class="block rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus:outline focus:outline-2 focus:outline-offset-2 sm:rounded-l-lg sm:rounded-r-none"><%= req.translations.disable %></button>
-                  <button id="togglefooter" type="submit" class="block rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white shadow-lg hover:bg-green-500 transition focus:outline focus:outline-2 focus:outline-offset-2 sm:rounded-none sm:rounded-r-lg opacity-[0.7]" disabled><%= req.translations.enable %></button>
-                  <% } else { %>
-                  <button id="togglefooter" type="submit" class="block rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white shadow-lg hover:bg-red-500 transition focus:outline focus:outline-2 focus:outline-offset-2 sm:rounded-l-lg sm:rounded-r-none opacity-[0.7]" disabled><%= req.translations.disable %></button>
-                  <button id="togglefooter" type="submit" class="block rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-800 shadow-lg hover:bg-neutral-200 transition focus:outline focus:outline-2 focus:outline-offset-2 sm:rounded-none sm:rounded-r-lg"><%= req.translations.enable %></button>
-                  <% } %>  
-               </div>
-            </form>
-            <div id="sidebar-direction" class="mt-4 mb-4">
+         <div id="sidebar-direction" class="mt-4 mb-4">
             <form action="/admin/settings/change/theme/color" method="POST">
                <div class="flex items-center mb-2">
                   <% if (theme['sidebar-direction'] === "right") { %>
